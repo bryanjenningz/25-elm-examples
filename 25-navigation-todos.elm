@@ -191,16 +191,10 @@ update msg model =
                 , saveTodos newTodos
                 )
 
-        RemoveTodo index ->
+        RemoveTodo todoId ->
             let
-                beforeTodos =
-                    List.take index model.todos
-
-                afterTodos =
-                    List.drop (index + 1) model.todos
-
                 newTodos =
-                    beforeTodos ++ afterTodos
+                    List.filter (\todo -> todo.id /= todoId) model.todos
             in
                 ( { model | todos = newTodos }, saveTodos newTodos )
 

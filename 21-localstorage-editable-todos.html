@@ -4,8 +4,19 @@
 </head>
 <body>
   <script>
+    var isArrayOfStrings = function(array) {
+      return Array.isArray(array) && array.every(function(element) {
+        return typeof element === 'string';
+      });
+    };
+    
+    var getTodos = function() {
+      var todos = JSON.parse(localStorage.todos || '[]') || [];
+      return isArrayOfStrings(todos) ? todos : [];
+    };
+    
     var app = Elm.Main.fullscreen({
-      todos: JSON.parse(localStorage.todos || '[]') || []
+      todos: getTodos()
     });
     
     app.ports.saveTodos.subscribe(function(todos) {

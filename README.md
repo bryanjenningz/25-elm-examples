@@ -48,7 +48,6 @@
 
 <h2>Todos</h2>
 <ul>
-  <li>Add links to Ellie programs for each example</li>
   <li>Add explanations</li>
 </ul>
 

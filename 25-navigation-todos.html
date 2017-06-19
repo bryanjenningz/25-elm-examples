@@ -1,0 +1,32 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css">
+</head>
+<body>
+  <script>
+    var isTodos = function(todos) {
+      return Array.isArray(todos) && todos.every(function(todo) {
+        return (
+          !!todo &&
+          typeof todo.id === 'number' &&
+          typeof todo.text === 'string' &&
+          typeof todo.completed === 'boolean'
+        );
+      });
+    };
+    
+    var todosDefault = function(todos) {
+      return isTodos(todos) ? todos : [];
+    };
+    
+    var app = Elm.Main.fullscreen({
+      todos: todosDefault(JSON.parse(localStorage.todos || '[]'))
+    });
+    
+    app.ports.saveTodos.subscribe(function(todos) {
+      localStorage.todos = JSON.stringify(todos);
+    });
+  </script>
+</body>
+</html>

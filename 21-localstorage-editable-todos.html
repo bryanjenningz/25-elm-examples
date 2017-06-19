@@ -1,0 +1,16 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css">
+</head>
+<body>
+  <script>
+    var app = Elm.Main.fullscreen({
+      todos: JSON.parse(localStorage.todos || '[]') || []
+    });
+    
+    app.ports.saveTodos.subscribe(function(todos) {
+      localStorage.todos = JSON.stringify(todos);
+    });
+  </script>
+</body>
+</html>

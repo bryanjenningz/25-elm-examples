@@ -17,6 +17,9 @@ type alias Model =
     }
 
 
+-- We added some nice little touches to the web app. We added a placeholder
+-- attribute that's similar to the placeholder attribute you're used to with
+-- native HTML.
 view : Model -> Html Msg
 view model =
     div [ class "col-12 col-sm-6 offset-sm-3" ]
@@ -41,6 +44,7 @@ view model =
         ]
 
 
+-- We made the styling nicer by taking advantage of Bootstrap classes.
 viewTodo : Int -> String -> Html Msg
 viewTodo index todo =
     div [ class "card" ]

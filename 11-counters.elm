@@ -5,6 +5,10 @@ import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 
 
+-- We've added the (Decrement Int) value to the Msg union type.
+-- (Decrement Int) will work in a similar way that (Increment Int) works
+-- except it will decrement the counter at the specified index instead of
+-- incrementing it.
 type Msg
     = Increment Int
     | Decrement Int
@@ -22,6 +26,8 @@ viewCount index count =
         , button
             [ class "btn btn-primary ml-2", onClick (Increment index) ]
             [ text "+" ]
+        -- We added a button that will trigger pass a (Decrement Int) message
+        -- to the update function when it's clicked.
         , button
             [ class "btn btn-primary ml-2", onClick (Decrement index) ]
             [ text "-" ]
@@ -53,6 +59,8 @@ update msg model =
                 )
                 model
 
+        -- We added an expression that handles the (Decrement Int) message value,
+        -- which decrements the counter at the index that we care about.
         Decrement index ->
             List.indexedMap
                 (\i count ->

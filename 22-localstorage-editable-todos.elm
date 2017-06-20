@@ -20,12 +20,16 @@ type alias TodoEdit =
     }
 
 
+-- We changed the todos so that they aren't just strings, they now are records
+-- with a completed property which represents whether the user has completed
+-- that todo.
 type alias Todo =
     { text : String
     , completed : Bool
     }
 
 
+-- The todos property is now List Todo instead of List String.
 type alias Model =
     { text : String
     , todos : List Todo
@@ -90,6 +94,8 @@ viewNormalTodo : Int -> Todo -> Html Msg
 viewNormalTodo index todo =
     div [ class "card" ]
         [ div [ class "card-block" ]
+            -- Added a checkbox that can be clicked to toggle the todo between
+            -- being completed or incomplete.
             [ input
                 [ onClick (ToggleTodo index)
                 , type_ "checkbox"
@@ -99,6 +105,7 @@ viewNormalTodo index todo =
                 []
             , span
                 [ onDoubleClick (Edit index todo.text)
+                -- Added styling to indicate a todo is completed.
                 , style
                     [ ( "text-decoration"
                       , if todo.completed then
@@ -167,6 +174,7 @@ update msg model =
                 , saveTodos newTodos
                 )
 
+        -- Added an extra clause to handle toggling the todo.
         ToggleTodo index ->
             let
                 newTodos =
@@ -182,6 +190,7 @@ update msg model =
                 ( { model | todos = newTodos }, saveTodos newTodos )
 
 
+-- We changed the port type declaration to take a list of Todo records.
 port saveTodos : List Todo -> Cmd msg
 
 

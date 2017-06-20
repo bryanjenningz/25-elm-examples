@@ -95,6 +95,20 @@ viewNormalTodo index todo =
         ]
 
 
+-- We're using program now instead of beginnerProgram, so our update function
+-- slightly different.
+-- The update function is mostly the same as before but now instead of just
+-- returning the model, we now return a tuple containing the new model value
+-- and a command which can perform side effects.
+-- We don't need to do any side effects, so we've just added Cmd.none as the
+-- command for each returning value of the case expression.
+-- Since Elm is a pure functional programming language, the only way you can
+-- perform side effects is by using commands and subscriptions. You'll see
+-- how they work later. Just think of commands as a way of asking for some
+-- side effect to happen and think of subscriptions as a way of listening or
+-- subscribing to the result of some side effect.
+-- Commands get returned from the update function and the resulting values
+-- produced from subscriptions get passed as a message to the update function.
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -141,6 +155,8 @@ update msg model =
                 )
 
 
+-- We don't need subscriptions, so we're just going to have the subscription
+-- function return Sub.none, which indicates we have no subscriptions.
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
@@ -148,6 +164,14 @@ subscriptions model =
 
 main : Program Never Model Msg
 main =
+    -- We are now using program instead of beginnerProgram, which takes
+    -- a record with the properties: init, view, update, and subscriptions.
+    -- The init property is similar to the model property in beginnerProgram
+    -- except that it takes a tuple of type ( Model, Cmd Msg ) instead of
+    -- just Model like before. The Cmd Msg is useful for if you want to
+    -- perform any side effects in the beginning of the program. You usually
+    -- don't need to perform any side effects, so you just put the value Cmd.none
+    -- as the command value whenever you don't need to do any commands.
     program
         { init =
             ( { text = ""

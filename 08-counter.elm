@@ -5,6 +5,7 @@ import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 
 
+-- We've added another new Msg value that we're going to call Reset.
 type Msg
     = Increment
     | Decrement
@@ -26,6 +27,9 @@ view model =
             , button
                 [ class "btn btn-danger", onClick Decrement ]
                 [ text "-" ]
+            -- We added a new button that will trigger an event
+            -- that will pass the Reset value as a message to the
+            -- update function.
             , button
                 [ class "btn btn-default", onClick Reset ]
                 [ text "Reset" ]
@@ -33,6 +37,8 @@ view model =
         ]
 
 
+-- We added a new entry in the case expression that checks for if the message
+-- is Reset. If it is, then the new model value will be 0.
 update : Msg -> Model -> Model
 update msg model =
     case msg of

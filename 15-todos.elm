@@ -5,6 +5,8 @@ import Html.Attributes exposing (class, value, autofocus)
 import Html.Events exposing (onInput, onClick)
 
 
+-- We added a (RemoveTodo Int) value to the Msg type, which will allow us
+-- to remove a todo by index.
 type Msg
     = UpdateText String
     | AddTodo
@@ -29,6 +31,8 @@ view model =
                 (\index todo ->
                     div []
                         [ text todo
+                        -- We add a little "X" that we can click to remove
+                        -- the todo at the specified index.
                         , span [ onClick (RemoveTodo index) ] [ text " X" ]
                         ]
                 )
@@ -46,6 +50,8 @@ update msg model =
         AddTodo ->
             { model | text = "", todos = model.todos ++ [ model.text ] }
 
+        -- We use a let expression to get the todos before and after, then
+        -- we set the newTodos value to them concatenated together.
         RemoveTodo index ->
             let
                 beforeTodos =

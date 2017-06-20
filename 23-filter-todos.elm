@@ -5,6 +5,7 @@ import Html.Attributes exposing (class, value, autofocus, placeholder, style, ty
 import Html.Events exposing (onInput, onClick, onSubmit, onDoubleClick)
 
 
+-- Added a SetFilter value to the Msg union type.
 type Msg
     = UpdateText String
     | AddTodo
@@ -15,6 +16,7 @@ type Msg
     | SetFilter Filter
 
 
+-- Made a new Filter type to represent all the possible filter values.
 type Filter
     = All
     | Incomplete
@@ -33,6 +35,7 @@ type alias Todo =
     }
 
 
+-- Added a filter property to the model state to track the filter value.
 type alias Model =
     { text : String
     , todos : List Todo
@@ -62,13 +65,19 @@ view model =
                 ]
             ]
         , viewFilters model.filter
+        -- This <| operator means to evaluate everything to the right of the <|
+        -- before passing it to the expression to the left. So the List.indexedMap
+        -- expression will be evaluated first, then the resulting list will get
+        -- passed to (div []).
         , div [] <|
             List.indexedMap
                 (viewTodo model.editing)
+                -- We now filter the todos based on the current filter
                 (filterTodos model.filter model.todos)
         ]
 
 
+-- Returns the todos that should be displayed based on what the filter is.
 filterTodos : Filter -> List Todo -> List Todo
 filterTodos filter todos =
     case filter of
@@ -82,6 +91,7 @@ filterTodos filter todos =
             List.filter (\t -> t.completed) todos
 
 
+-- Added the HTML representation of the filters.
 viewFilters : Filter -> Html Msg
 viewFilters filter =
     div []
@@ -91,6 +101,7 @@ viewFilters filter =
         ]
 
 
+-- Here's how each filter is displayed.
 viewFilter : Filter -> Bool -> String -> Html Msg
 viewFilter filter isFilter filterText =
     if isFilter then
@@ -98,6 +109,7 @@ viewFilter filter isFilter filterText =
     else
         span
             [ class "text-primary mr-3"
+            -- When you click on a filter, it will get set as the current filter.
             , onClick (SetFilter filter)
             , style [ ( "cursor", "pointer" ) ]
             ]
@@ -228,6 +240,8 @@ update msg model =
             in
                 ( { model | todos = newTodos }, saveTodos newTodos )
 
+        -- We added this clause to set the filter to its new value when
+        -- the message value is (SetFilter Filter).
         SetFilter filter ->
             ( { model | filter = filter }, Cmd.none )
 

@@ -46,9 +46,4 @@
   <li><a href="https://github.com/rtfeldman/elm-spa-example">RealWorld Elm example app</a></li>
 </ul>
 
-<h2>Todos</h2>
-<ul>
-  <li>Add explanations</li>
-</ul>
-
 <p>If you have any suggestions for more examples that I should add or if anything is unclear, add an issue or a pull request.</p>

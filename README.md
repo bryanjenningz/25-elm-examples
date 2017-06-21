@@ -37,6 +37,34 @@
   <li><a href="https://ellie-app.com/3wR7QgwzngSa1/25">25-localstorage-editable-todos.elm</a></li>
 </ol>
 
+<h2>How to run and view examples 1-20 on your computer</h2>
+<div>
+  <code>
+    git clone https://github.com/bryanjenningz/25-elm-examples.git
+    <br>
+    cd 25-elm-examples
+    <br>
+    elm-make 01-hello-world.elm --yes
+    <br>
+    open index.html
+  </code>
+</div>
+<p>This code compiles the Elm file and produces an HTML file called `index.html` which contains the JavaScript that Elm was compiled to. If you want to compile and view the second example, you can do the same thing with the second file: `elm-make 02-hello-world.elm --yes` to compile, then `open index.html` to open it in your default browser.</p>
+
+<h2>How to run and view examples 21-25 on your computer</h2>
+<div>
+  <code>
+    git clone https://github.com/bryanjenningz/25-elm-examples.git
+    <br>
+    cd 25-elm-examples
+    <br>
+    elm-make 21-localstorage-editable-todos.elm --output elm.js --yes
+    <br>
+    open 21-localstorage-editable-todos.html
+  </code>
+</div>
+<p>This code example will compile the `21-localstorage-editable-todos.elm` file into the JavaScript file `elm.js`. Then it will open `21-localstorage-editable-todos.html` in your default browser, which has a script tag pointing to `elm.js`. To run the `22-localstorage-editable-todos.elm` file, just run `elm-make 22-localstorage-editable-todos.elm --output elm.js --yes` then `open 22-localstorage-editable-todos.html`. To compile and view 23-25, you do the same process of compiling the elm file to the elm.js JavaScript file, then opening the HTML file in your browser.</p>
+
 <h2>Other Free Resources</h2>
 <ul>
   <li><a href="https://guide.elm-lang.org/">Official Elm Guide</a></li>

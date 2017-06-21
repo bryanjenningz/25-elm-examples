@@ -39,15 +39,14 @@
 
 <h2>How to run and view examples 21-25 on your computer</h2>
 <p>You can use the Ellie links for examples 21-25, but if you want to run it locally, you can copy/paste the following commands which will clone the Github repo, then compile example 21 to a JavaScript file called elm.js, then you will open the HTML for example 21 in your default browser.</p>
-<div>
-  <code>git clone https://github.com/bryanjenningz/25-elm-examples.git</code>
-  <br>
-  <code>cd 25-elm-examples</code>
-  <br>
-  <code>elm-make 21-localstorage-editable-todos.elm --output elm.js --yes</code>
-  <br>
-  <code>open 21-localstorage-editable-todos.html</code>
-</div>
+<pre>
+  <code>
+git clone https://github.com/bryanjenningz/25-elm-examples.git
+cd 25-elm-examples
+elm-make 21-localstorage-editable-todos.elm --output elm.js --yes
+open 21-localstorage-editable-todos.html
+  </code>
+</pre>
 <p>The above code will compile and open example 21 in your default browser. To compile and view examples 22 through 25 locally, you do the same process of compiling the Elm file you want to the elm.js JavaScript file, then opening the HTML file you want to view in your browser.</p>
 
 <h2>Other Free Resources</h2>

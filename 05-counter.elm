@@ -73,7 +73,7 @@ update msg model =
 -- triggers any events like the onClick event we have, the message and the model will
 -- get passed to the update function and then the update function will return the new
 -- model. Now that the model is different, the view function will get passed the new
--- model value and return the new HTML. That new HTML will get display on the screen.
+-- model value and return the new HTML. That new HTML will get displayed on the screen.
 main =
     beginnerProgram
         { model = 0

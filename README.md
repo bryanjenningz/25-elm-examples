@@ -58,4 +58,4 @@ open 21-localstorage-editable-todos.html
   <li><a href="https://github.com/rtfeldman/elm-spa-example">RealWorld Elm example app</a></li>
 </ul>
 
-<p>If you have any suggestions for more examples that I should add or if anything is unclear, add an issue or a pull request.</p>
+<p>These 25 Elm examples were inspired by the <a href="http://elm-lang.org/examples">examples</a> on the Elm website and the <a href="https://guide.elm-lang.org/">official Elm guide</a>. Each example tries to build off of the previous example by adding a small amount of code so that it's easy to understand and see how you can build stuff in Elm. If you have any suggestions for more examples that should be added or if anything is unclear, add an issue or make a pull request.</p>

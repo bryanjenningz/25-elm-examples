@@ -32,9 +32,10 @@
   <li><a href="https://ellie-app.com/3wR7QgwzngSa1/20">21-localstorage-editable-todos.elm</a></li>
   <li><a href="https://ellie-app.com/3wR7QgwzngSa1/21">22-localstorage-editable-todos.elm</a></li>
 
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/22">23-localstorage-editable-todos.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/26">24-localstorage-editable-todos.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/25">25-localstorage-editable-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/22">23-filter-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/26">24-filter-todos.elm</a></li>
+  
+  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/25">25-navigation-todos.elm</a></li>
 </ol>
 
 <h2>How to run and view examples 21-25 on your computer</h2>

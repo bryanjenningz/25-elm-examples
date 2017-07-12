@@ -3,9 +3,15 @@ port module Main exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class, value, autofocus, placeholder, style, type_, checked)
 import Html.Events exposing (onInput, onClick, onSubmit, onDoubleClick)
+-- Importing the Random module because we're going to use it to generate
+-- a random id so that we can uniquely identify each todo.
 import Random
 
 
+-- Added GenerateTodoId message, which we're going to use to generate a
+-- random id for a newly created todo.
+-- AddTodo was changed to (AddTodo Int) because it now takes the integer
+-- id that was randomly generated and uses that to add the new todo.
 type Msg
     = UpdateText String
     | GenerateTodoId
@@ -23,12 +29,16 @@ type Filter
     | Completed
 
 
+-- Before TodoEdit had an index and a text field, now we're going to be
+-- using the todo's id to identify which todo we're editing, so I
+-- switched the field name from index to id.
 type alias TodoEdit =
     { id : Int
     , text : String
     }
 
 
+-- Added an id field, which will hold each todo's randomly generated id.
 type alias Todo =
     { id : Int
     , text : String
@@ -47,6 +57,8 @@ type alias Model =
 view : Model -> Html Msg
 view model =
     div [ class "col-12 col-sm-6 offset-sm-3" ]
+        -- GenerateTodoId is now the message that gets passed into
+        -- the update function as the message when the form submits.
         [ form [ class "row", onSubmit GenerateTodoId ]
             [ div [ class "col-9" ]
                 [ input
@@ -66,6 +78,8 @@ view model =
             ]
         , viewFilters model.filter
         , div [] <|
+            -- We use List.map now instead of List.indexedMap, since we
+            -- are using the id and not the index to edit and remove todos.
             List.map
                 (viewTodo model.editing)
                 (filterTodos model.filter model.todos)
@@ -107,6 +121,10 @@ viewFilter filter isFilter filterText =
             [ text filterText ]
 
 
+-- viewTodo now has one less argument because it doesn't need
+-- to have the index passed in anymore since it uses the id 
+-- for editing and removing each todo. It also doesn't pass
+-- the index into viewEditTodo and viewNormalTodo anymore.
 viewTodo : Maybe TodoEdit -> Todo -> Html Msg
 viewTodo editing todo =
     case editing of
@@ -120,6 +138,9 @@ viewTodo editing todo =
             viewNormalTodo todo
 
 
+-- viewEditTodo has one less argument because it doesn't need the index
+-- for editing, it uses the todo's id to identify the todo that is being edited.
+-- It passes in todoEdit.id into Edit and EditSave now instead of the index.
 viewEditTodo : TodoEdit -> Html Msg
 viewEditTodo todoEdit =
     div [ class "card" ]
@@ -136,6 +157,8 @@ viewEditTodo todoEdit =
         ]
 
 
+-- viewNormalTodo has one less argument because it doesn't need the index.
+-- It now passes todo.id into ToggleTodo, Edit, and RemoveTodo instead of the index.
 viewNormalTodo : Todo -> Html Msg
 viewNormalTodo todo =
     div [ class "card" ]
@@ -173,12 +196,32 @@ update msg model =
     case msg of
         UpdateText newText ->
             ( { model | text = newText }, Cmd.none )
-
+        
+        -- When the form to add a new todo submits, it now passes in
+        -- GenerateTodoId, which will generate a random integer id,
+        -- then the result will be passed into AddTodo which now accepts
+        -- an integer.
+        -- I'm going to explain each part of this:
+        --   Random.generate AddTodo (Random.int Random.minInt Random.maxInt)
+        -- Random.int is a function that takes 2 Int arguments and returns
+        -- a (Generate Int) type. Random.minInt is the minimum integer value
+        -- that a 32-bit integer can be. Random.maxInt is the maximum integer
+        -- value that a 32-bit integer can be.
+        -- So (Random.int Random.minInt Random.maxInt) is a Generator Int type.
+        -- Random.generate is a function that takes a function that accepts an
+        -- Int and returns a Msg as the first argument and a Generator Int as
+        -- the second argument, then it will randomly generate an integer
+        -- between Random.minInt and Random.maxInt, then it will pass that
+        -- integer to AddTodo, which will get passed into the update function.
         GenerateTodoId ->
             ( model
             , Random.generate AddTodo (Random.int Random.minInt Random.maxInt)
             )
 
+        -- So now after the random id is generated, it gets passed into AddTodo
+        -- which gets passed into the update function. We take the id and current
+        -- model.text value to create the new todo and then we append the new
+        -- todo to the end of model.todos.
         AddTodo todoId ->
             let
                 newTodos =
@@ -188,6 +231,9 @@ update msg model =
                 , saveTodos newTodos
                 )
 
+        -- Since we get passed the id, we can just use List.filter to
+        -- keep all the todos that don't have the same id as the one
+        -- we are removing.
         RemoveTodo todoId ->
             let
                 newTodos =
@@ -195,17 +241,22 @@ update msg model =
             in
                 ( { model | todos = newTodos }, saveTodos newTodos )
 
+        -- We use id to track the edited todo instead of the index.
         Edit todoId todoText ->
             ( { model | editing = Just { id = todoId, text = todoText } }
             , Cmd.none
             )
 
-        EditSave index todoText ->
+        -- We are now saving the todo, so if the todo's id is the id that we
+        -- were editing, then we change the text of that todo to the edit text.
+        -- If its id isn't the same as the edit todo's id, we keep it the same
+        -- because it wasn't the todo that we were editing.
+        EditSave todoId todoText ->
             let
                 newTodos =
-                    List.indexedMap
-                        (\i todo ->
-                            if i == index then
+                    List.map
+                        (\todo ->
+                            if todo.id == todoId then
                                 { todo | text = todoText }
                             else
                                 todo
@@ -216,6 +267,8 @@ update msg model =
                 , saveTodos newTodos
                 )
 
+        -- We map over the todos and change the completed field of
+        -- the todo that has the id that we chose to toggle.
         ToggleTodo todoId ->
             let
                 newTodos =

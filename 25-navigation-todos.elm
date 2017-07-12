@@ -4,9 +4,18 @@ import Html exposing (..)
 import Html.Attributes exposing (class, value, autofocus, placeholder, style, type_, checked, href)
 import Html.Events exposing (onInput, onClick, onSubmit, onDoubleClick)
 import Random
+-- Importing the Navigation module because we're going to be using it
+-- to keep track of the URL and display the appropriate todos for that
+-- URL. For example, "/#incomplete" will show the incomplete todos and
+-- "/#completed" will show the completed todos. All other URLs will
+-- show all of the todos.
 import Navigation
 
 
+-- UrlChange Navigation.Location is a new message type.
+-- Every time the location in the URL changes, UrlChange will
+-- get passed the new location record which contains information
+-- about the URL.
 type Msg
     = UpdateText String
     | GenerateTodoId
@@ -103,6 +112,10 @@ viewFilter filter isFilter filterText =
     else
         a
             [ class "text-primary mr-3"
+            -- Whenever the user clicks on a filter link, the
+            -- hash in the URL changes to the filterText.
+            -- So if you refresh the page and your URL is
+            -- "/#completed", the completed todos will be visible.
             , href ("#" ++ String.toLower filterText)
             , onClick (SetFilter filter)
             , style [ ( "cursor", "pointer" ) ]
@@ -203,12 +216,12 @@ update msg model =
             , Cmd.none
             )
 
-        EditSave index todoText ->
+        EditSave todoId todoText ->
             let
                 newTodos =
-                    List.indexedMap
-                        (\i todo ->
-                            if i == index then
+                    List.map
+                        (\todo ->
+                            if todo.id == todoId then
                                 { todo | text = todoText }
                             else
                                 todo
@@ -236,10 +249,20 @@ update msg model =
         SetFilter filter ->
             ( { model | filter = filter }, Cmd.none )
 
+        -- Whenever the URL changes, the current location gets passed to
+        -- UrlChange, which gets passed into the update function.
+        -- We pass the location into locationToFilter, which takes the
+        -- current location and returns the current filter.
         UrlChange location ->
             ( { model | filter = locationToFilter location }, Cmd.none )
 
 
+-- We only care about location.hash for determining which filter is set.
+-- If the hash is "#incomplete", we want our filter to be Incomplete, so
+-- that the todos that are incomplete are shown.
+-- We want "#complete" to show the completed todos.
+-- The clause _ -> catches all other strings, which means that all other
+-- URL hashes will show all of the todos.
 locationToFilter : Navigation.Location -> Filter
 locationToFilter location =
     case String.toLower location.hash of
@@ -261,6 +284,13 @@ subscriptions model =
     Sub.none
 
 
+-- We're now using Navigation.programWithFlags, which takes an extra argument
+-- which is the initial location when the page loads. We want the filter to
+-- be set based on the current location, so we use (locationToFilter location)
+-- which returns the filter that we will use for that URL. So if the page's
+-- URL is initially "/#completed", then (locationToFilter location) will return
+-- Completed as the filter, so the filter value will be Completed, which will
+-- make it show the completed todos are shown.
 init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
 init flags location =
     ( Model "" flags.todos Nothing (locationToFilter location)
@@ -272,6 +302,9 @@ type alias Flags =
     { todos : List Todo }
 
 
+-- We're using Navigation.programWithFlags instead of Html.programWithFlags,
+-- which takes UrlChange and it will pass the location to UrlChange whenever
+-- the URL changes and then that will get passed into the update function.
 main : Program Flags Model Msg
 main =
     Navigation.programWithFlags UrlChange

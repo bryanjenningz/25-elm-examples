@@ -1,12 +1,16 @@
-module Main exposing (..)
+module Main exposing (main)
 
-import Html exposing (Html, text, div, beginnerProgram, button)
+import Browser exposing (sandbox)
+import Html exposing (Html, button, div, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 
 
+
 -- We added an AddCount value as our Msg type, which we'll use to indicate
 -- that we want to add a counter to our list of counters.
+
+
 type Msg
     = Increment Int
     | AddCount
@@ -19,7 +23,7 @@ type alias Model =
 viewCount : Int -> Int -> Html Msg
 viewCount index count =
     div [ class "mb-2" ]
-        [ text (toString count)
+        [ text (String.fromInt count)
         , button
             [ class "btn btn-primary ml-2", onClick (Increment index) ]
             [ text "+" ]
@@ -53,6 +57,7 @@ update msg model =
                 (\i count ->
                     if i == index then
                         count + 1
+
                     else
                         count
                 )
@@ -67,10 +72,10 @@ update msg model =
             model ++ [ 0 ]
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    beginnerProgram
-        { model = [ 0, 0 ]
+    sandbox
+        { init = [ 0, 0 ]
         , view = view
         , update = update
         }

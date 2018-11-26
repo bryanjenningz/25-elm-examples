@@ -1,8 +1,9 @@
-module Main exposing (..)
+module Main exposing (main)
 
-import Html exposing (Html, text, div, beginnerProgram, input, button, span)
-import Html.Attributes exposing (class, value, autofocus, placeholder)
-import Html.Events exposing (onInput, onClick)
+import Browser exposing (sandbox)
+import Html exposing (Html, button, div, input, span, text)
+import Html.Attributes exposing (autofocus, class, placeholder, value)
+import Html.Events exposing (onClick, onInput)
 
 
 type Msg
@@ -17,9 +18,12 @@ type alias Model =
     }
 
 
+
 -- We added some nice little touches to the web app. We added a placeholder
 -- attribute that's similar to the placeholder attribute you're used to with
 -- native HTML.
+
+
 view : Model -> Html Msg
 view model =
     div [ class "col-12 col-sm-6 offset-sm-3" ]
@@ -44,7 +48,10 @@ view model =
         ]
 
 
+
 -- We made the styling nicer by taking advantage of Bootstrap classes.
+
+
 viewTodo : Int -> String -> Html Msg
 viewTodo index todo =
     div [ class "card" ]
@@ -79,13 +86,13 @@ update msg model =
                 newTodos =
                     beforeTodos ++ afterTodos
             in
-                { model | todos = newTodos }
+            { model | todos = newTodos }
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    beginnerProgram
-        { model = { text = "", todos = [] }
+    sandbox
+        { init = { text = "", todos = [] }
         , view = view
         , update = update
         }

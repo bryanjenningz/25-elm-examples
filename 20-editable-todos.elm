@@ -1,8 +1,9 @@
-module Main exposing (..)
+module Main exposing (main)
 
+import Browser exposing (element)
 import Html exposing (..)
-import Html.Attributes exposing (class, value, autofocus, placeholder)
-import Html.Events exposing (onInput, onClick, onSubmit, onDoubleClick)
+import Html.Attributes exposing (autofocus, class, placeholder, value)
+import Html.Events exposing (onClick, onDoubleClick, onInput, onSubmit)
 
 
 type Msg
@@ -56,6 +57,7 @@ viewTodo editing index todo =
         Just todoEdit ->
             if todoEdit.index == index then
                 viewEditTodo index todoEdit
+
             else
                 viewNormalTodo index todo
 
@@ -117,7 +119,7 @@ update msg model =
                 newTodos =
                     beforeTodos ++ afterTodos
             in
-                ( { model | todos = newTodos }, Cmd.none )
+            ( { model | todos = newTodos }, Cmd.none )
 
         Edit index todoText ->
             ( { model | editing = Just { index = index, text = todoText } }
@@ -131,14 +133,15 @@ update msg model =
                         (\i todo ->
                             if i == index then
                                 todoText
+
                             else
                                 todo
                         )
                         model.todos
             in
-                ( { model | editing = Nothing, todos = newTodos }
-                , Cmd.none
-                )
+            ( { model | editing = Nothing, todos = newTodos }
+            , Cmd.none
+            )
 
 
 subscriptions : Model -> Sub Msg
@@ -146,30 +149,34 @@ subscriptions model =
     Sub.none
 
 
-main : Program Never Model Msg
+init : () -> ( Model, Cmd Msg )
+init flags =
+    -- This is the short-hand version of what we had before.
+    -- Before we had the model initially as the value:
+    --   { text = "", todos = [ "Laundry", "Dishes" ], editing = Nothing }
+    -- We can also represent this value as this:
+    --   Model "" [ "Laundry", "Dishes" ] Nothing
+    -- Whenever we make a type alias that's a record, like Model, we
+    -- can use Model as a constructor function that returns a Model record.
+    -- Since we defined the Model type alias like this:
+    -- type alias Model =
+    --    { text : String
+    --    , todos : List String
+    --    , editing : Maybe TodoEdit
+    --    }
+    -- (Model "" [ "Laundry", "Dishes" ] Nothing) will make the first
+    -- argument the text property since that is first in the type alias
+    -- declaration. The second argument will be the todos property, and
+    -- the third argument will be the editing property.
+    ( Model "" [ "Laundry", "Dishes" ] Nothing
+    , Cmd.none
+    )
+
+
+main : Program () Model Msg
 main =
-    program
-        { init =
-            -- This is the short-hand version of what we had before.
-            -- Before we had the model initially as the value:
-            --   { text = "", todos = [ "Laundry", "Dishes" ], editing = Nothing }
-            -- We can also represent this value as this:
-            --   Model "" [ "Laundry", "Dishes" ] Nothing
-            -- Whenever we make a type alias that's a record, like Model, we
-            -- can use Model as a constructor function that returns a Model record.
-            -- Since we defined the Model type alias like this:
-            -- type alias Model =
-            --    { text : String
-            --    , todos : List String
-            --    , editing : Maybe TodoEdit
-            --    }
-            -- (Model "" [ "Laundry", "Dishes" ] Nothing) will make the first
-            -- argument the text property since that is first in the type alias
-            -- declaration. The second argument will be the todos property, and
-            -- the third argument will be the editing property.
-            ( Model "" [ "Laundry", "Dishes" ] Nothing
-            , Cmd.none
-            )
+    element
+        { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions

@@ -1,17 +1,22 @@
-port module Main exposing (..)
+port module Main exposing (main)
 
-import Html exposing (..)
-import Html.Attributes exposing (class, value, autofocus, placeholder, style, type_, checked)
-import Html.Events exposing (onInput, onClick, onSubmit, onDoubleClick)
 -- Importing the Random module because we're going to use it to generate
 -- a random id so that we can uniquely identify each todo.
+
+import Browser exposing (element)
+import Html exposing (..)
+import Html.Attributes exposing (autofocus, checked, class, placeholder, style, type_, value)
+import Html.Events exposing (onClick, onDoubleClick, onInput, onSubmit)
 import Random
+
 
 
 -- Added GenerateTodoId message, which we're going to use to generate a
 -- random id for a newly created todo.
 -- AddTodo was changed to (AddTodo Int) because it now takes the integer
 -- id that was randomly generated and uses that to add the new todo.
+
+
 type Msg
     = UpdateText String
     | GenerateTodoId
@@ -29,16 +34,22 @@ type Filter
     | Completed
 
 
+
 -- Before TodoEdit had an index and a text field, now we're going to be
 -- using the todo's id to identify which todo we're editing, so I
 -- switched the field name from index to id.
+
+
 type alias TodoEdit =
     { id : Int
     , text : String
     }
 
 
+
 -- Added an id field, which will hold each todo's randomly generated id.
+
+
 type alias Todo =
     { id : Int
     , text : String
@@ -112,25 +123,30 @@ viewFilter : Filter -> Bool -> String -> Html Msg
 viewFilter filter isFilter filterText =
     if isFilter then
         span [ class "mr-3" ] [ text filterText ]
+
     else
         span
             [ class "text-primary mr-3"
             , onClick (SetFilter filter)
-            , style [ ( "cursor", "pointer" ) ]
+            , style "cursor" "pointer"
             ]
             [ text filterText ]
 
 
+
 -- viewTodo now has one less argument because it doesn't need
--- to have the index passed in anymore since it uses the id 
+-- to have the index passed in anymore since it uses the id
 -- for editing and removing each todo. It also doesn't pass
 -- the index into viewEditTodo and viewNormalTodo anymore.
+
+
 viewTodo : Maybe TodoEdit -> Todo -> Html Msg
 viewTodo editing todo =
     case editing of
         Just todoEdit ->
             if todoEdit.id == todo.id then
                 viewEditTodo todoEdit
+
             else
                 viewNormalTodo todo
 
@@ -138,9 +154,12 @@ viewTodo editing todo =
             viewNormalTodo todo
 
 
+
 -- viewEditTodo has one less argument because it doesn't need the index
 -- for editing, it uses the todo's id to identify the todo that is being edited.
 -- It passes in todoEdit.id into Edit and EditSave now instead of the index.
+
+
 viewEditTodo : TodoEdit -> Html Msg
 viewEditTodo todoEdit =
     div [ class "card" ]
@@ -157,8 +176,11 @@ viewEditTodo todoEdit =
         ]
 
 
+
 -- viewNormalTodo has one less argument because it doesn't need the index.
 -- It now passes todo.id into ToggleTodo, Edit, and RemoveTodo instead of the index.
+
+
 viewNormalTodo : Todo -> Html Msg
 viewNormalTodo todo =
     div [ class "card" ]
@@ -173,13 +195,13 @@ viewNormalTodo todo =
             , span
                 [ onDoubleClick (Edit todo.id todo.text)
                 , style
-                    [ ( "text-decoration"
-                      , if todo.completed then
-                            "line-through"
-                        else
-                            "none"
-                      )
-                    ]
+                    "text-decoration"
+                    (if todo.completed then
+                        "line-through"
+
+                     else
+                        "none"
+                    )
                 ]
                 [ text todo.text ]
             , span
@@ -196,7 +218,7 @@ update msg model =
     case msg of
         UpdateText newText ->
             ( { model | text = newText }, Cmd.none )
-        
+
         -- When the form to add a new todo submits, it now passes in
         -- GenerateTodoId, which will generate a random integer id,
         -- then the result will be passed into AddTodo which now accepts
@@ -227,9 +249,9 @@ update msg model =
                 newTodos =
                     model.todos ++ [ Todo todoId model.text False ]
             in
-                ( { model | text = "", todos = newTodos }
-                , saveTodos newTodos
-                )
+            ( { model | text = "", todos = newTodos }
+            , saveTodos newTodos
+            )
 
         -- Since we get passed the id, we can just use List.filter to
         -- keep all the todos that don't have the same id as the one
@@ -239,7 +261,7 @@ update msg model =
                 newTodos =
                     List.filter (\todo -> todo.id /= todoId) model.todos
             in
-                ( { model | todos = newTodos }, saveTodos newTodos )
+            ( { model | todos = newTodos }, saveTodos newTodos )
 
         -- We use id to track the edited todo instead of the index.
         Edit todoId todoText ->
@@ -258,14 +280,15 @@ update msg model =
                         (\todo ->
                             if todo.id == todoId then
                                 { todo | text = todoText }
+
                             else
                                 todo
                         )
                         model.todos
             in
-                ( { model | editing = Nothing, todos = newTodos }
-                , saveTodos newTodos
-                )
+            ( { model | editing = Nothing, todos = newTodos }
+            , saveTodos newTodos
+            )
 
         -- We map over the todos and change the completed field of
         -- the todo that has the id that we chose to toggle.
@@ -276,12 +299,13 @@ update msg model =
                         (\todo ->
                             if todo.id == todoId then
                                 { todo | completed = not todo.completed }
+
                             else
                                 todo
                         )
                         model.todos
             in
-                ( { model | todos = newTodos }, saveTodos newTodos )
+            ( { model | todos = newTodos }, saveTodos newTodos )
 
         SetFilter filter ->
             ( { model | filter = filter }, Cmd.none )
@@ -308,7 +332,7 @@ type alias Flags =
 
 main : Program Flags Model Msg
 main =
-    programWithFlags
+    element
         { init = init
         , view = view
         , update = update

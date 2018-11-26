@@ -1,11 +1,14 @@
-module Main exposing (..)
+module Main exposing (main)
 
 -- I got lazy exposing all of those functions from the Html module, so
 -- I decided to use (..), which means that I'm exposing all the functions
 -- from the Html module.
+
+import Browser exposing (sandbox)
 import Html exposing (..)
-import Html.Attributes exposing (class, value, autofocus, placeholder)
-import Html.Events exposing (onInput, onClick, onSubmit, onDoubleClick)
+import Html.Attributes exposing (autofocus, class, placeholder, value)
+import Html.Events exposing (onClick, onDoubleClick, onInput, onSubmit)
+
 
 
 -- We added 2 new values to the Msg union type, (Edit Int String) and
@@ -16,6 +19,8 @@ import Html.Events exposing (onInput, onClick, onSubmit, onDoubleClick)
 -- The (EditSave Int String) value will be used to save the new value of the
 -- todo. The Int is todo index, the string is the string we want to save that
 -- todo as.
+
+
 type Msg
     = UpdateText String
     | AddTodo
@@ -24,13 +29,17 @@ type Msg
     | EditSave Int String
 
 
+
 -- We are creating a new type alias which is just a record that will represent
 -- the editing state. The index property is the index of the todo we're editing
 -- and the text is that todo's string value.
+
+
 type alias TodoEdit =
     { index : Int
     , text : String
     }
+
 
 
 -- We added a new property called editing, which will keep track of the editing
@@ -42,6 +51,8 @@ type alias TodoEdit =
 -- make more sense when you get used to using Maybe types. Don't worry if it
 -- doesn't make complete sense yet. Just think of Maybe types as nullable types
 -- in JavaScript.
+
+
 type alias Model =
     { text : String
     , todos : List String
@@ -69,6 +80,7 @@ view model =
                     [ text "+" ]
                 ]
             ]
+
         -- We are using (viewTodo model.editing) as the function, that gets
         -- passed into List.indexedMap. All this means is that the first argument
         -- to viewTodo is model.editing, the remaining 2 arguments will be
@@ -77,23 +89,28 @@ view model =
         ]
 
 
+
 -- We use a case expression to check the editing value, which is model.editing.
 -- The editing value is a Maybe type, so it can either be Nothing or Just value.
 -- If its value is Nothing, that means we aren't editing any todos.
 -- If the value is (Just todoEdit), then we need to check to see if the index
 -- that we're editing is the current index we're at, if it is, then we need
 -- to return the viewEditTodo function with the appropriate arguments passed in.
+
+
 viewTodo : Maybe TodoEdit -> Int -> String -> Html Msg
 viewTodo editing index todo =
     case editing of
         Just todoEdit ->
             if todoEdit.index == index then
                 viewEditTodo index todoEdit
+
             else
                 viewNormalTodo index todo
 
         Nothing ->
             viewNormalTodo index todo
+
 
 
 -- This is what a todo looks like when it's being edited. You can save edits
@@ -103,6 +120,8 @@ viewTodo editing index todo =
 -- the (Edit index) message add the current input box string to the end so
 -- that it's like (Edit index editText), then pass that message to the update
 -- function.
+
+
 viewEditTodo : Int -> TodoEdit -> Html Msg
 viewEditTodo index todoEdit =
     div [ class "card" ]
@@ -119,9 +138,12 @@ viewEditTodo index todoEdit =
         ]
 
 
+
 -- This is what a todo looks like when it's not being edited. If you want to
 -- edit a todo, simply double click on the todo text, which will change the state
 -- so that you are editing that todo.
+
+
 viewNormalTodo : Int -> String -> Html Msg
 viewNormalTodo index todo =
     div [ class "card" ]
@@ -158,7 +180,7 @@ update msg model =
                 newTodos =
                     beforeTodos ++ afterTodos
             in
-                { model | todos = newTodos }
+            { model | todos = newTodos }
 
         -- We are just setting the editing property in the model the editing
         -- value that we can use to represent the edit.
@@ -176,21 +198,25 @@ update msg model =
                         (\i todo ->
                             if i == index then
                                 todoText
+
                             else
                                 todo
                         )
                         model.todos
             in
-                { model | editing = Nothing, todos = newTodos }
+            { model | editing = Nothing, todos = newTodos }
+
 
 
 -- I set the todos property of the model to the list
 -- [ "Laundry", "Dishes" ] in the beginning. The editing property is set to
 -- Nothing in the beginning since we aren't editing anything in the beginning.
-main : Program Never Model Msg
+
+
+main : Program () Model Msg
 main =
-    beginnerProgram
-        { model =
+    sandbox
+        { init =
             { text = ""
             , todos = [ "Laundry", "Dishes" ]
             , editing = Nothing

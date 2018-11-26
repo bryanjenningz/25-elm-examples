@@ -1,8 +1,17 @@
-module Main exposing (..)
+module Main exposing (main)
 
+-- We're exposing element now instead of sandbox.
+-- This will allow us to do side effects with commands and subscriptions.
+-- I'll explain more about commands and subscriptions later, but for now
+-- just think of them as the 2 only ways to do side effects in Elm.
+-- Having side effects be really controlled like this is really nice for
+-- large projects because side effects can only happen in 2 locations, so
+-- it makes programs easier to understand.
+
+import Browser exposing (element)
 import Html exposing (..)
-import Html.Attributes exposing (class, value, autofocus, placeholder)
-import Html.Events exposing (onInput, onClick, onSubmit, onDoubleClick)
+import Html.Attributes exposing (autofocus, class, placeholder, value)
+import Html.Events exposing (onClick, onDoubleClick, onInput, onSubmit)
 
 
 type Msg
@@ -56,6 +65,7 @@ viewTodo editing index todo =
         Just todoEdit ->
             if todoEdit.index == index then
                 viewEditTodo index todoEdit
+
             else
                 viewNormalTodo index todo
 
@@ -95,7 +105,8 @@ viewNormalTodo index todo =
         ]
 
 
--- We're using program now instead of beginnerProgram, so our update function
+
+-- We're using element now instead of sandbox, so our update function is
 -- slightly different.
 -- The update function is mostly the same as before but now instead of just
 -- returning the model, we now return a tuple containing the new model value
@@ -109,6 +120,8 @@ viewNormalTodo index todo =
 -- subscribing to the result of some side effect.
 -- Commands get returned from the update function and the resulting values
 -- produced from subscriptions get passed as a message to the update function.
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -131,7 +144,7 @@ update msg model =
                 newTodos =
                     beforeTodos ++ afterTodos
             in
-                ( { model | todos = newTodos }, Cmd.none )
+            ( { model | todos = newTodos }, Cmd.none )
 
         Edit index todoText ->
             ( { model | editing = Just { index = index, text = todoText } }
@@ -145,41 +158,51 @@ update msg model =
                         (\i todo ->
                             if i == index then
                                 todoText
+
                             else
                                 todo
                         )
                         model.todos
             in
-                ( { model | editing = Nothing, todos = newTodos }
-                , Cmd.none
-                )
+            ( { model | editing = Nothing, todos = newTodos }
+            , Cmd.none
+            )
+
 
 
 -- We don't need subscriptions, so we're just going to have the subscription
 -- function return Sub.none, which indicates we have no subscriptions.
+-- I'll explain subscriptions more in the future when we use them, so don't
+-- worry about them right now.
+
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
 
 
-main : Program Never Model Msg
+init : () -> ( Model, Cmd Msg )
+init flags =
+    ( { text = ""
+      , todos = [ "Laundry", "Dishes" ]
+      , editing = Nothing
+      }
+    , Cmd.none
+    )
+
+
+main : Program () Model Msg
 main =
-    -- We are now using program instead of beginnerProgram, which takes
+    -- We are now using element instead of sandbox, which takes
     -- a record with the properties: init, view, update, and subscriptions.
-    -- The init property is similar to the model property in beginnerProgram
-    -- except that it takes a tuple of type ( Model, Cmd Msg ) instead of
-    -- just Model like before. The Cmd Msg is useful for if you want to
+    -- The init property is similar to the init property in sandbox
+    -- except that it takes a function that takes in flags and return a tuple of
+    --  type ( Model, Cmd Msg ). The Cmd Msg is useful for if you want to
     -- perform any side effects in the beginning of the program. You usually
     -- don't need to perform any side effects, so you just put the value Cmd.none
     -- as the command value whenever you don't need to do any commands.
-    program
-        { init =
-            ( { text = ""
-              , todos = [ "Laundry", "Dishes" ]
-              , editing = Nothing
-              }
-            , Cmd.none
-            )
+    element
+        { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions

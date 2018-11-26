@@ -1,21 +1,28 @@
-port module Main exposing (..)
+-- TODO: UPGRADE THIS FILE TO ELM 0.19
 
-import Html exposing (..)
-import Html.Attributes exposing (class, value, autofocus, placeholder, style, type_, checked, href)
-import Html.Events exposing (onInput, onClick, onSubmit, onDoubleClick)
-import Random
+
+port module Main exposing (main)
+
 -- Importing the Navigation module because we're going to be using it
 -- to keep track of the URL and display the appropriate todos for that
 -- URL. For example, "/#incomplete" will show the incomplete todos and
 -- "/#completed" will show the completed todos. All other URLs will
 -- show all of the todos.
+
+import Html exposing (..)
+import Html.Attributes exposing (autofocus, checked, class, href, placeholder, style, type_, value)
+import Html.Events exposing (onClick, onDoubleClick, onInput, onSubmit)
 import Navigation
+import Random
+
 
 
 -- UrlChange Navigation.Location is a new message type.
 -- Every time the location in the URL changes, UrlChange will
 -- get passed the new location record which contains information
 -- about the URL.
+
+
 type Msg
     = UpdateText String
     | GenerateTodoId
@@ -109,9 +116,11 @@ viewFilter : Filter -> Bool -> String -> Html Msg
 viewFilter filter isFilter filterText =
     if isFilter then
         span [ class "mr-3" ] [ text filterText ]
+
     else
         a
             [ class "text-primary mr-3"
+
             -- Whenever the user clicks on a filter link, the
             -- hash in the URL changes to the filterText.
             -- So if you refresh the page and your URL is
@@ -129,6 +138,7 @@ viewTodo editing todo =
         Just todoEdit ->
             if todoEdit.id == todo.id then
                 viewEditTodo todoEdit
+
             else
                 viewNormalTodo todo
 
@@ -169,6 +179,7 @@ viewNormalTodo todo =
                     [ ( "text-decoration"
                       , if todo.completed then
                             "line-through"
+
                         else
                             "none"
                       )
@@ -200,16 +211,16 @@ update msg model =
                 newTodos =
                     model.todos ++ [ Todo todoId model.text False ]
             in
-                ( { model | text = "", todos = newTodos }
-                , saveTodos newTodos
-                )
+            ( { model | text = "", todos = newTodos }
+            , saveTodos newTodos
+            )
 
         RemoveTodo todoId ->
             let
                 newTodos =
                     List.filter (\todo -> todo.id /= todoId) model.todos
             in
-                ( { model | todos = newTodos }, saveTodos newTodos )
+            ( { model | todos = newTodos }, saveTodos newTodos )
 
         Edit todoId todoText ->
             ( { model | editing = Just { id = todoId, text = todoText } }
@@ -223,14 +234,15 @@ update msg model =
                         (\todo ->
                             if todo.id == todoId then
                                 { todo | text = todoText }
+
                             else
                                 todo
                         )
                         model.todos
             in
-                ( { model | editing = Nothing, todos = newTodos }
-                , saveTodos newTodos
-                )
+            ( { model | editing = Nothing, todos = newTodos }
+            , saveTodos newTodos
+            )
 
         ToggleTodo todoId ->
             let
@@ -239,12 +251,13 @@ update msg model =
                         (\todo ->
                             if todo.id == todoId then
                                 { todo | completed = not todo.completed }
+
                             else
                                 todo
                         )
                         model.todos
             in
-                ( { model | todos = newTodos }, saveTodos newTodos )
+            ( { model | todos = newTodos }, saveTodos newTodos )
 
         SetFilter filter ->
             ( { model | filter = filter }, Cmd.none )
@@ -257,12 +270,15 @@ update msg model =
             ( { model | filter = locationToFilter location }, Cmd.none )
 
 
+
 -- We only care about location.hash for determining which filter is set.
 -- If the hash is "#incomplete", we want our filter to be Incomplete, so
 -- that the todos that are incomplete are shown.
 -- We want "#complete" to show the completed todos.
 -- The clause _ -> catches all other strings, which means that all other
 -- URL hashes will show all of the todos.
+
+
 locationToFilter : Navigation.Location -> Filter
 locationToFilter location =
     case String.toLower location.hash of
@@ -284,6 +300,7 @@ subscriptions model =
     Sub.none
 
 
+
 -- We're now using Navigation.programWithFlags, which takes an extra argument
 -- which is the initial location when the page loads. We want the filter to
 -- be set based on the current location, so we use (locationToFilter location)
@@ -291,6 +308,8 @@ subscriptions model =
 -- URL is initially "/#completed", then (locationToFilter location) will return
 -- Completed as the filter, so the filter value will be Completed, which will
 -- make it show the completed todos are shown.
+
+
 init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
 init flags location =
     ( Model "" flags.todos Nothing (locationToFilter location)
@@ -302,9 +321,12 @@ type alias Flags =
     { todos : List Todo }
 
 
+
 -- We're using Navigation.programWithFlags instead of Html.programWithFlags,
 -- which takes UrlChange and it will pass the location to UrlChange whenever
 -- the URL changes and then that will get passed into the update function.
+
+
 main : Program Flags Model Msg
 main =
     Navigation.programWithFlags UrlChange

@@ -1,8 +1,9 @@
-port module Main exposing (..)
+port module Main exposing (main)
 
+import Browser exposing (element)
 import Html exposing (..)
-import Html.Attributes exposing (class, value, autofocus, placeholder, style, type_, checked)
-import Html.Events exposing (onInput, onClick, onSubmit, onDoubleClick)
+import Html.Attributes exposing (autofocus, checked, class, placeholder, style, type_, value)
+import Html.Events exposing (onClick, onDoubleClick, onInput, onSubmit)
 
 
 type Msg
@@ -20,16 +21,22 @@ type alias TodoEdit =
     }
 
 
+
 -- We changed the todos so that they aren't just strings, they now are records
 -- with a completed property which represents whether the user has completed
 -- that todo.
+
+
 type alias Todo =
     { text : String
     , completed : Bool
     }
 
 
+
 -- The todos property is now List Todo instead of List String.
+
+
 type alias Model =
     { text : String
     , todos : List Todo
@@ -67,6 +74,7 @@ viewTodo editing index todo =
         Just todoEdit ->
             if todoEdit.index == index then
                 viewEditTodo index todoEdit
+
             else
                 viewNormalTodo index todo
 
@@ -105,15 +113,16 @@ viewNormalTodo index todo =
                 []
             , span
                 [ onDoubleClick (Edit index todo.text)
+
                 -- Added styling to indicate a todo is completed.
                 , style
-                    [ ( "text-decoration"
-                      , if todo.completed then
-                            "line-through"
-                        else
-                            "none"
-                      )
-                    ]
+                    "text-decoration"
+                    (if todo.completed then
+                        "line-through"
+
+                     else
+                        "none"
+                    )
                 ]
                 [ text todo.text ]
             , span
@@ -136,9 +145,9 @@ update msg model =
                 newTodos =
                     model.todos ++ [ Todo model.text False ]
             in
-                ( { model | text = "", todos = newTodos }
-                , saveTodos newTodos
-                )
+            ( { model | text = "", todos = newTodos }
+            , saveTodos newTodos
+            )
 
         RemoveTodo index ->
             let
@@ -151,7 +160,7 @@ update msg model =
                 newTodos =
                     beforeTodos ++ afterTodos
             in
-                ( { model | todos = newTodos }, saveTodos newTodos )
+            ( { model | todos = newTodos }, saveTodos newTodos )
 
         Edit index todoText ->
             ( { model | editing = Just { index = index, text = todoText } }
@@ -165,14 +174,15 @@ update msg model =
                         (\i todo ->
                             if i == index then
                                 { todo | text = todoText }
+
                             else
                                 todo
                         )
                         model.todos
             in
-                ( { model | editing = Nothing, todos = newTodos }
-                , saveTodos newTodos
-                )
+            ( { model | editing = Nothing, todos = newTodos }
+            , saveTodos newTodos
+            )
 
         -- Added an extra clause to handle toggling the todo.
         ToggleTodo index ->
@@ -182,15 +192,19 @@ update msg model =
                         (\i todo ->
                             if i == index then
                                 { todo | completed = not todo.completed }
+
                             else
                                 todo
                         )
                         model.todos
             in
-                ( { model | todos = newTodos }, saveTodos newTodos )
+            ( { model | todos = newTodos }, saveTodos newTodos )
+
 
 
 -- We changed the port type declaration to take a list of Todo records.
+
+
 port saveTodos : List Todo -> Cmd msg
 
 
@@ -212,7 +226,7 @@ type alias Flags =
 
 main : Program Flags Model Msg
 main =
-    programWithFlags
+    element
         { init = init
         , view = view
         , update = update

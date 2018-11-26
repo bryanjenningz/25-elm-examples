@@ -1,26 +1,36 @@
-module Main exposing (..)
+module Main exposing (main)
 
-import Html exposing (Html, text, div, beginnerProgram, input, button)
-import Html.Attributes exposing (class, value, autofocus)
-import Html.Events exposing (onInput, onClick)
+import Browser exposing (sandbox)
+import Html exposing (Html, button, div, input, text)
+import Html.Attributes exposing (autofocus, class, value)
+import Html.Events exposing (onClick, onInput)
+
 
 
 -- We added a new AddTodo message type.
+
+
 type Msg
     = UpdateText String
     | AddTodo
 
 
+
 -- We added a new property called todos, which is a list of strings.
+
+
 type alias Model =
     { text : String
     , todos : List String
     }
 
 
+
 -- We added (autofocus True), which is like the native HTML autofocus attribute.
 -- We also added a button that triggers an onClick event when clicked which
 -- passes an AddTodo message to the update function.
+
+
 view : Model -> Html Msg
 view model =
     div [ class "text-center" ]
@@ -41,11 +51,14 @@ update msg model =
             { model | text = "", todos = model.todos ++ [ model.text ] }
 
 
+
 -- We set the todos property so that it's initially an empty list.
-main : Program Never Model Msg
+
+
+main : Program () Model Msg
 main =
-    beginnerProgram
-        { model = { text = "", todos = [] }
+    sandbox
+        { init = { text = "", todos = [] }
         , view = view
         , update = update
         }

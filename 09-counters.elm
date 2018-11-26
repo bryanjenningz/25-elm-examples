@@ -1,8 +1,10 @@
-module Main exposing (..)
+module Main exposing (main)
 
-import Html exposing (Html, text, div, beginnerProgram, button)
+import Browser exposing (sandbox)
+import Html exposing (Html, button, div, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
+
 
 
 -- Before, we had just one counter, but now we are working with multiple
@@ -15,14 +17,20 @@ import Html.Events exposing (onClick)
 -- want to increment the counter at index 0, we can have the onClick event
 -- trigger the message (Increment 0). If we want to increment the counter at
 -- index 1, we can trigger the message (Increment 1).
+
+
 type Msg
     = Increment Int
 
 
+
 -- We've changed the Model alias so that it's a list of integers. Each integer
 -- represents a counter's count in a list of counters.
+
+
 type alias Model =
     List Int
+
 
 
 -- This is a function that takes the index value, the count value, and returns
@@ -30,14 +38,17 @@ type alias Model =
 -- trigger an onClick event which will pass (Increment index) as the message to
 -- the update function. The index value is the index that the button is at in
 -- the list of buttons.
+
+
 viewCount : Int -> Int -> Html Msg
 viewCount index count =
     div [ class "mb-2" ]
-        [ text (toString count)
+        [ text (String.fromInt count)
         , button
             [ class "btn btn-primary", onClick (Increment index) ]
             [ text "+" ]
         ]
+
 
 
 -- The view function returns a div element that has a list of counters
@@ -46,10 +57,13 @@ viewCount index count =
 -- List.indexedMap is similar to Array.prototype.map in JavaScript.
 -- The list index will get passed as the first argument to the function and
 -- the list value will get passed as the second argument to the function.
+
+
 view : Model -> Html Msg
 view model =
     div [ class "text-center" ]
         (List.indexedMap viewCount model)
+
 
 
 -- We only need to deal with one type of message which is the (Increment Int)
@@ -57,6 +71,8 @@ view model =
 -- passes the (Increment Int) value into the update function.
 -- We map the model, which is a list and we update the value at the index that
 -- got clicked by using the List.indexedMap function.
+
+
 update : Msg -> Model -> Model
 update msg model =
     case msg of
@@ -65,18 +81,22 @@ update msg model =
                 (\i count ->
                     if i == index then
                         count + 1
+
                     else
                         count
                 )
                 model
 
 
+
 -- We set the model value to initially be [ 0, 0 ], so our view will display
 -- 2 counters that each have the value 0 in the beginning.
-main : Program Never Model Msg
+
+
+main : Program () Model Msg
 main =
-    beginnerProgram
-        { model = [ 0, 0 ]
+    sandbox
+        { init = [ 0, 0 ]
         , view = view
         , update = update
         }

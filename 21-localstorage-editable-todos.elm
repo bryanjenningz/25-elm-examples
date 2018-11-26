@@ -1,11 +1,14 @@
 -- We added "port" in from of the module declaration, which indicates that we
 -- are using ports in this module. Ports are a way of communicating to JavaScript.
 -- We're using ports to save our model state in localStorage.
-port module Main exposing (..)
 
+
+port module Main exposing (main)
+
+import Browser exposing (element)
 import Html exposing (..)
-import Html.Attributes exposing (class, value, autofocus, placeholder)
-import Html.Events exposing (onInput, onClick, onSubmit, onDoubleClick)
+import Html.Attributes exposing (autofocus, class, placeholder, value)
+import Html.Events exposing (onClick, onDoubleClick, onInput, onSubmit)
 
 
 type Msg
@@ -59,6 +62,7 @@ viewTodo editing index todo =
         Just todoEdit ->
             if todoEdit.index == index then
                 viewEditTodo index todoEdit
+
             else
                 viewNormalTodo index todo
 
@@ -98,11 +102,14 @@ viewNormalTodo index todo =
         ]
 
 
+
 -- There are some clauses of the case statement that return a command now.
 -- The command carries the current todos state, which gets sent to JavaScript
 -- via ports. The JavaScript code is subscribed to the saveTodos port, which
 -- passes the todos into a callback that saves the todos to localStorage in
 -- JavaScript.
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -114,9 +121,9 @@ update msg model =
                 newTodos =
                     model.todos ++ [ model.text ]
             in
-                ( { model | text = "", todos = newTodos }
-                , saveTodos newTodos
-                )
+            ( { model | text = "", todos = newTodos }
+            , saveTodos newTodos
+            )
 
         RemoveTodo index ->
             let
@@ -129,7 +136,7 @@ update msg model =
                 newTodos =
                     beforeTodos ++ afterTodos
             in
-                ( { model | todos = newTodos }, saveTodos newTodos )
+            ( { model | todos = newTodos }, saveTodos newTodos )
 
         Edit index todoText ->
             ( { model | editing = Just { index = index, text = todoText } }
@@ -143,18 +150,22 @@ update msg model =
                         (\i todo ->
                             if i == index then
                                 todoText
+
                             else
                                 todo
                         )
                         model.todos
             in
-                ( { model | editing = Nothing, todos = newTodos }
-                , saveTodos newTodos
-                )
+            ( { model | editing = Nothing, todos = newTodos }
+            , saveTodos newTodos
+            )
+
 
 
 -- This is the port declaration that we're going to use to save our todos
 -- to localStorage.
+
+
 port saveTodos : List String -> Cmd msg
 
 
@@ -163,16 +174,20 @@ subscriptions model =
     Sub.none
 
 
+
 -- The init value is now a function that takes in the flags as an argument
 -- and returns a tuple containing the initial model and a command. We initially
 -- set the todos value to the todos that come from the flag. The todos that
 -- came with the flag are the todos that were loaded from localStorage and passed
 -- into Elm.
+
+
 init : Flags -> ( Model, Cmd Msg )
 init flags =
     ( Model "" flags.todos Nothing
     , Cmd.none
     )
+
 
 
 -- We're going to use flags to load the todos from localStorage at the start of
@@ -181,15 +196,20 @@ init flags =
 -- Flags type be a record that has a todos property, which is a list of strings
 -- that represents the todos that were loaded from localStorage and passed into
 -- Elm as flags.
+
+
 type alias Flags =
     { todos : List String }
 
 
--- The type declaration change from (Program Never Model Msg) because now we're
+
+-- The type declaration change from (Program () Model Msg) because now we're
 -- using flags to get the todos from JavaScript in the beginning of the program.
+
+
 main : Program Flags Model Msg
 main =
-    programWithFlags
+    element
         { init = init
         , view = view
         , update = update

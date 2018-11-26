@@ -1,8 +1,9 @@
-module Main exposing (..)
+module Main exposing (main)
 
-import Html exposing (Html, text, div, beginnerProgram, input, button, span, form)
-import Html.Attributes exposing (class, value, autofocus, placeholder)
-import Html.Events exposing (onInput, onClick, onSubmit)
+import Browser exposing (sandbox)
+import Html exposing (Html, button, div, form, input, span, text)
+import Html.Attributes exposing (autofocus, class, placeholder, value)
+import Html.Events exposing (onClick, onInput, onSubmit)
 
 
 type Msg
@@ -17,11 +18,14 @@ type alias Model =
     }
 
 
+
 -- We made it so you can now hit enter to add a todo instead of having to
 -- click on the button. To accomplish this, we wrapped the input and button
 -- in a form and made the AddTodo message get passed whenever an onSubmit
 -- event gets triggered. The onSubmit event will get triggered whenever
 -- the user hits enter in the input box or clicks on the button.
+
+
 view : Model -> Html Msg
 view model =
     div [ class "col-12 col-sm-6 offset-sm-3" ]
@@ -80,13 +84,13 @@ update msg model =
                 newTodos =
                     beforeTodos ++ afterTodos
             in
-                { model | todos = newTodos }
+            { model | todos = newTodos }
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    beginnerProgram
-        { model = { text = "", todos = [] }
+    sandbox
+        { init = { text = "", todos = [] }
         , view = view
         , update = update
         }

@@ -1,11 +1,15 @@
-port module Main exposing (..)
+port module Main exposing (main)
 
+import Browser exposing (element)
 import Html exposing (..)
-import Html.Attributes exposing (class, value, autofocus, placeholder, style, type_, checked)
-import Html.Events exposing (onInput, onClick, onSubmit, onDoubleClick)
+import Html.Attributes exposing (autofocus, checked, class, placeholder, style, type_, value)
+import Html.Events exposing (onClick, onDoubleClick, onInput, onSubmit)
+
 
 
 -- Added a SetFilter value to the Msg union type.
+
+
 type Msg
     = UpdateText String
     | AddTodo
@@ -16,7 +20,10 @@ type Msg
     | SetFilter Filter
 
 
+
 -- Made a new Filter type to represent all the possible filter values.
+
+
 type Filter
     = All
     | Incomplete
@@ -35,7 +42,10 @@ type alias Todo =
     }
 
 
+
 -- Added a filter property to the model state to track the filter value.
+
+
 type alias Model =
     { text : String
     , todos : List Todo
@@ -65,6 +75,7 @@ view model =
                 ]
             ]
         , viewFilters model.filter
+
         -- This <| operator means to evaluate everything to the right of the <|
         -- before passing it to the expression to the left. So the List.indexedMap
         -- expression will be evaluated first, then the resulting list will get
@@ -77,7 +88,10 @@ view model =
         ]
 
 
+
 -- Returns the todos that should be displayed based on what the filter is.
+
+
 filterTodos : Filter -> List Todo -> List Todo
 filterTodos filter todos =
     case filter of
@@ -91,7 +105,10 @@ filterTodos filter todos =
             List.filter (\t -> t.completed) todos
 
 
+
 -- Added the HTML representation of the filters.
+
+
 viewFilters : Filter -> Html Msg
 viewFilters filter =
     div []
@@ -101,17 +118,22 @@ viewFilters filter =
         ]
 
 
+
 -- Here's how each filter is displayed.
+
+
 viewFilter : Filter -> Bool -> String -> Html Msg
 viewFilter filter isFilter filterText =
     if isFilter then
         span [ class "mr-3" ] [ text filterText ]
+
     else
         span
             [ class "text-primary mr-3"
+
             -- When you click on a filter, it will get set as the current filter.
             , onClick (SetFilter filter)
-            , style [ ( "cursor", "pointer" ) ]
+            , style "cursor" "pointer"
             ]
             [ text filterText ]
 
@@ -122,6 +144,7 @@ viewTodo editing index todo =
         Just todoEdit ->
             if todoEdit.index == index then
                 viewEditTodo index todoEdit
+
             else
                 viewNormalTodo index todo
 
@@ -159,13 +182,13 @@ viewNormalTodo index todo =
             , span
                 [ onDoubleClick (Edit index todo.text)
                 , style
-                    [ ( "text-decoration"
-                      , if todo.completed then
-                            "line-through"
-                        else
-                            "none"
-                      )
-                    ]
+                    "text-decoration"
+                    (if todo.completed then
+                        "line-through"
+
+                     else
+                        "none"
+                    )
                 ]
                 [ text todo.text ]
             , span
@@ -188,9 +211,9 @@ update msg model =
                 newTodos =
                     model.todos ++ [ Todo model.text False ]
             in
-                ( { model | text = "", todos = newTodos }
-                , saveTodos newTodos
-                )
+            ( { model | text = "", todos = newTodos }
+            , saveTodos newTodos
+            )
 
         RemoveTodo index ->
             let
@@ -203,7 +226,7 @@ update msg model =
                 newTodos =
                     beforeTodos ++ afterTodos
             in
-                ( { model | todos = newTodos }, saveTodos newTodos )
+            ( { model | todos = newTodos }, saveTodos newTodos )
 
         Edit index todoText ->
             ( { model | editing = Just { index = index, text = todoText } }
@@ -217,14 +240,15 @@ update msg model =
                         (\i todo ->
                             if i == index then
                                 { todo | text = todoText }
+
                             else
                                 todo
                         )
                         model.todos
             in
-                ( { model | editing = Nothing, todos = newTodos }
-                , saveTodos newTodos
-                )
+            ( { model | editing = Nothing, todos = newTodos }
+            , saveTodos newTodos
+            )
 
         ToggleTodo index ->
             let
@@ -233,12 +257,13 @@ update msg model =
                         (\i todo ->
                             if i == index then
                                 { todo | completed = not todo.completed }
+
                             else
                                 todo
                         )
                         model.todos
             in
-                ( { model | todos = newTodos }, saveTodos newTodos )
+            ( { model | todos = newTodos }, saveTodos newTodos )
 
         -- We added this clause to set the filter to its new value when
         -- the message value is (SetFilter Filter).
@@ -267,7 +292,7 @@ type alias Flags =
 
 main : Program Flags Model Msg
 main =
-    programWithFlags
+    element
         { init = init
         , view = view
         , update = update

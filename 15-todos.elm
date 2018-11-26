@@ -1,12 +1,16 @@
-module Main exposing (..)
+module Main exposing (main)
 
-import Html exposing (Html, text, div, beginnerProgram, input, button, span)
-import Html.Attributes exposing (class, value, autofocus)
-import Html.Events exposing (onInput, onClick)
+import Browser exposing (sandbox)
+import Html exposing (Html, button, div, input, span, text)
+import Html.Attributes exposing (autofocus, class, value)
+import Html.Events exposing (onClick, onInput)
+
 
 
 -- We added a (RemoveTodo Int) value to the Msg type, which will allow us
 -- to remove a todo by index.
+
+
 type Msg
     = UpdateText String
     | AddTodo
@@ -31,6 +35,7 @@ view model =
                 (\index todo ->
                     div []
                         [ text todo
+
                         -- We add a little "X" that we can click to remove
                         -- the todo at the specified index.
                         , span [ onClick (RemoveTodo index) ] [ text " X" ]
@@ -63,13 +68,13 @@ update msg model =
                 newTodos =
                     beforeTodos ++ afterTodos
             in
-                { model | todos = newTodos }
+            { model | todos = newTodos }
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    beginnerProgram
-        { model = { text = "", todos = [] }
+    sandbox
+        { init = { text = "", todos = [] }
         , view = view
         , update = update
         }

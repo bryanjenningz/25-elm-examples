@@ -1,14 +1,18 @@
-module Main exposing (..)
+module Main exposing (main)
 
-import Html exposing (Html, text, div, beginnerProgram, button)
+import Browser exposing (sandbox)
+import Html exposing (Html, button, div, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
+
 
 
 -- We've added the (Decrement Int) value to the Msg union type.
 -- (Decrement Int) will work in a similar way that (Increment Int) works
 -- except it will decrement the counter at the specified index instead of
 -- incrementing it.
+
+
 type Msg
     = Increment Int
     | Decrement Int
@@ -22,10 +26,11 @@ type alias Model =
 viewCount : Int -> Int -> Html Msg
 viewCount index count =
     div [ class "mb-2" ]
-        [ text (toString count)
+        [ text (String.fromInt count)
         , button
             [ class "btn btn-primary ml-2", onClick (Increment index) ]
             [ text "+" ]
+
         -- We added a button that will trigger pass a (Decrement Int) message
         -- to the update function when it's clicked.
         , button
@@ -54,6 +59,7 @@ update msg model =
                 (\i count ->
                     if i == index then
                         count + 1
+
                     else
                         count
                 )
@@ -66,6 +72,7 @@ update msg model =
                 (\i count ->
                     if i == index then
                         count - 1
+
                     else
                         count
                 )
@@ -75,10 +82,10 @@ update msg model =
             model ++ [ 0 ]
 
 
-main : Program Never Model Msg
+main : Program () Model Msg
 main =
-    beginnerProgram
-        { model = [ 0, 0 ]
+    sandbox
+        { init = [ 0, 0 ]
         , view = view
         , update = update
         }

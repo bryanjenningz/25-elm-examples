@@ -13,14 +13,14 @@
   <li><a href="https://ellie-app.com/3Z97Y4VvSfRa1">07-counter.elm</a></li>
   <li><a href="https://ellie-app.com/3Z989cTkqPja1">08-counter.elm</a></li>
 
-  <li><a href="hhttps://ellie-app.com/3Z98PYxYvC4a1">09-counters.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z98PYxYvC4a1">09-counters.elm</a></li>
   <li><a href="https://ellie-app.com/3Z998Dq7PD5a1">10-counters.elm</a></li>
   <li><a href="https://ellie-app.com/3Z99qnMwbQra1">11-counters.elm</a></li>
   <li><a href="https://ellie-app.com/3Z99K3tpYbKa1">12-counters.elm</a></li>
 
   <li><a href="https://ellie-app.com/3Z99YBq3jM8a1">13-input-box.elm</a></li>
 
-  <li><a href="hhttps://ellie-app.com/3Z9bnpxFvffa1">14-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z9bnpxFvffa1">14-todos.elm</a></li>
   <li><a href="https://ellie-app.com/3Z9bCnDPRv8a1">15-todos.elm</a></li>
   <li><a href="https://ellie-app.com/3Z9bXz3RsyQa1">16-todos.elm</a></li>
   <li><a href="https://ellie-app.com/3Z9cf8ZrCpta1">17-todos.elm</a></li>

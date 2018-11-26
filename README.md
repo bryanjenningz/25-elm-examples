@@ -3,37 +3,37 @@
 
 <h2>Links to the examples using Ellie</h2>
 <ol>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/0">01-hello-world.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/1">02-hello-world.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/2">03-hello-world.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/3">04-hello-world.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z93zn5Qy3Da1">01-hello-world.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z93XBfHxcxa1">02-hello-world.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z94mwpfHN7a1">03-hello-world.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z95c4y6L9ha1">04-hello-world.elm</a></li>
 
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/4">05-counter.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/5">06-counter.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/6">07-counter.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/7">08-counter.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z95CNBn5Jha1">05-counter.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z97wqKsdn5a1">06-counter.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z97Y4VvSfRa1">07-counter.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z989cTkqPja1">08-counter.elm</a></li>
 
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/8">09-counters.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/9">10-counters.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/10">11-counters.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/11">12-counters.elm</a></li>
+  <li><a href="hhttps://ellie-app.com/3Z98PYxYvC4a1">09-counters.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z998Dq7PD5a1">10-counters.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z99qnMwbQra1">11-counters.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z99K3tpYbKa1">12-counters.elm</a></li>
 
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/12">13-input-box.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z99YBq3jM8a1">13-input-box.elm</a></li>
 
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/13">14-todos.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/14">15-todos.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/15">16-todos.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/16">17-todos.elm</a></li>
+  <li><a href="hhttps://ellie-app.com/3Z9bnpxFvffa1">14-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z9bCnDPRv8a1">15-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z9bXz3RsyQa1">16-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z9cf8ZrCpta1">17-todos.elm</a></li>
 
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/17">18-editable-todos.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/18">19-editable-todos.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/19">20-editable-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z9cDJ3N9g4a1">18-editable-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z9d3dXRdPxa1">19-editable-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z9dhJHkXg6a1">20-editable-todos.elm</a></li>
 
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/20">21-localstorage-editable-todos.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/21">22-localstorage-editable-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z9dKFRMyNDa1">21-localstorage-editable-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z9fg9YtbV4a1">22-localstorage-editable-todos.elm</a></li>
 
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/22">23-filter-todos.elm</a></li>
-  <li><a href="https://ellie-app.com/3wR7QgwzngSa1/26">24-filter-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z9fFVqF9Pra1">23-filter-todos.elm</a></li>
+  <li><a href="https://ellie-app.com/3Z9gnSZKYPTa1">24-filter-todos.elm</a></li>
   
   <li><a href="https://ellie-app.com/3wR7QgwzngSa1/25">25-navigation-todos.elm</a></li>
 </ol>

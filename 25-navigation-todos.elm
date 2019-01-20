@@ -1,26 +1,26 @@
--- TODO: UPGRADE THIS FILE TO ELM 0.19
-
-
 port module Main exposing (main)
 
--- Importing the Navigation module because we're going to be using it
--- to keep track of the URL and display the appropriate todos for that
--- URL. For example, "/#incomplete" will show the incomplete todos and
+-- We need some additional imports from Browser and Browser.Navigation packages.
+-- We're going to use functionality from them to keep track of the URL and display
+-- the appropriate todos for that URL.
+-- For example, "/#incomplete" will show the incomplete todos and
 -- "/#completed" will show the completed todos. All other URLs will
 -- show all of the todos.
 
+import Browser exposing (Document, UrlRequest(..), application)
+import Browser.Navigation exposing (Key)
 import Html exposing (..)
 import Html.Attributes exposing (autofocus, checked, class, href, placeholder, style, type_, value)
 import Html.Events exposing (onClick, onDoubleClick, onInput, onSubmit)
-import Navigation
 import Random
+import Url exposing (Url)
 
 
 
--- UrlChange Navigation.Location is a new message type.
--- Every time the location in the URL changes, UrlChange will
--- get passed the new location record which contains information
--- about the URL.
+-- We add two new messages:
+-- LinkClicked and ChangeUrl which are sent to our application by
+-- Browser.application every time when user clicks a link on a page or changes
+-- the URL in browser's navigation bar.
 
 
 type Msg
@@ -32,7 +32,8 @@ type Msg
     | EditSave Int String
     | ToggleTodo Int
     | SetFilter Filter
-    | UrlChange Navigation.Location
+    | LinkClicked UrlRequest
+    | ChangeUrl Url
 
 
 type Filter
@@ -59,11 +60,38 @@ type alias Model =
     , todos : List Todo
     , editing : Maybe TodoEdit
     , filter : Filter
+
+    -- We need to store the Browser.Navigation.Key in our model to be able to
+    -- call browser navigation functions from Browser.Navigation module.
+    -- The key gets passed to us on application initialization, where we store
+    -- it in our model.
+    -- Each function from Browser.Navigation module which manipulates browser
+    -- URL requires us to pass in this Key as a parameter.
+    -- This was a design decision made by the core developers
+    -- or Elm to prevent people from calling browser navigation functions outside
+    -- Browser.application (e.g. from less featureful applications like those
+    -- created by Browser.element), which could lead to a lot of insidious bugs.
+    , navigationKey : Key
     }
 
 
-view : Model -> Html Msg
+
+-- view function for the Browser.application requires us to return a value of
+-- type `Document Msg`. This is just a record containing
+-- 1. title String, which is used as a page title in the browser toolbar
+-- 2. body, which is a list of Html elements that will be children of the page's
+-- body element.
+
+
+view : Model -> Document Msg
 view model =
+    { title = "Navigation TODOs"
+    , body = [ viewBody model ]
+    }
+
+
+viewBody : Model -> Html Msg
+viewBody model =
     div [ class "col-12 col-sm-6 offset-sm-3" ]
         [ form [ class "row", onSubmit GenerateTodoId ]
             [ div [ class "col-9" ]
@@ -127,7 +155,7 @@ viewFilter filter isFilter filterText =
             -- "/#completed", the completed todos will be visible.
             , href ("#" ++ String.toLower filterText)
             , onClick (SetFilter filter)
-            , style [ ( "cursor", "pointer" ) ]
+            , style "cursor" "pointer"
             ]
             [ text filterText ]
 
@@ -175,15 +203,13 @@ viewNormalTodo todo =
                 []
             , span
                 [ onDoubleClick (Edit todo.id todo.text)
-                , style
-                    [ ( "text-decoration"
-                      , if todo.completed then
-                            "line-through"
+                , style "text-decoration"
+                    (if todo.completed then
+                        "line-through"
 
-                        else
-                            "none"
-                      )
-                    ]
+                     else
+                        "none"
+                    )
                 ]
                 [ text todo.text ]
             , span
@@ -262,34 +288,58 @@ update msg model =
         SetFilter filter ->
             ( { model | filter = filter }, Cmd.none )
 
-        -- Whenever the URL changes, the current location gets passed to
-        -- UrlChange, which gets passed into the update function.
-        -- We pass the location into locationToFilter, which takes the
+        -- Whenever user clicks a link on the page, the Elm runtime generates
+        -- this message for us and gives us the possibility to react.
+        -- See the docs in the elm/browser package to understand the difference
+        -- between Internal and External URL:
+        -- https://package.elm-lang.org/packages/elm/browser/latest/Browser#UrlRequest
+        LinkClicked urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( model
+                      -- When user clicks a link in our app (like "Complete")
+                      -- we ask the browser to make the new url part of browsing history
+                      -- WITHOUT reloading the page (i.e. without triggering http
+                      -- request to load a new page from the server).
+                    , Browser.Navigation.pushUrl model.navigationKey (Url.toString url)
+                    )
+
+                Browser.External url ->
+                    ( model, Browser.Navigation.load url )
+
+        -- Whenever the URL changes, the current URL gets passed to
+        -- ChangeUrl, which gets passed into the update function.
+        -- We pass the url into urlToFilter, which takes the
         -- current location and returns the current filter.
-        UrlChange location ->
-            ( { model | filter = locationToFilter location }, Cmd.none )
+        ChangeUrl url ->
+            ( { model | filter = urlToFilter url }, Cmd.none )
 
 
 
--- We only care about location.hash for determining which filter is set.
--- If the hash is "#incomplete", we want our filter to be Incomplete, so
+-- We only care about url.fragment for determining which filter is set.
+-- If the fragment is "incomplete", we want our filter to be Incomplete, so
 -- that the todos that are incomplete are shown.
--- We want "#complete" to show the completed todos.
+-- We want "complete" to show the completed todos.
 -- The clause _ -> catches all other strings, which means that all other
 -- URL hashes will show all of the todos.
 
 
-locationToFilter : Navigation.Location -> Filter
-locationToFilter location =
-    case String.toLower location.hash of
-        "#incomplete" ->
-            Incomplete
-
-        "#completed" ->
-            Completed
-
-        _ ->
+urlToFilter : Url -> Filter
+urlToFilter url =
+    case url.fragment of
+        Nothing ->
             All
+
+        Just hash ->
+            case String.toLower hash of
+                "incomplete" ->
+                    Incomplete
+
+                "completed" ->
+                    Completed
+
+                _ ->
+                    All
 
 
 port saveTodos : List Todo -> Cmd msg
@@ -301,18 +351,29 @@ subscriptions model =
 
 
 
--- We're now using Navigation.programWithFlags, which takes an extra argument
--- which is the initial location when the page loads. We want the filter to
--- be set based on the current location, so we use (locationToFilter location)
--- which returns the filter that we will use for that URL. So if the page's
--- URL is initially "/#completed", then (locationToFilter location) will return
--- Completed as the filter, so the filter value will be Completed, which will
--- make it show the completed todos are shown.
+-- We're now using Browser.appication, whose init function requires two additional
+-- arguments:
+-- 1. Url  - This will be passed to us by Elm runtime when the application is
+-- initialized.
+-- In our app we're using the URL to parse the currently active filter from
+-- the URL's fragment (the part of URL following the '#' character).
+-- We use (urlToFilter url) which returns the filter that we will use for that URL.
+--  So if the page's URL is initially "/#completed", then (urlToFilter url) will
+-- return Completed as the filter, so the filter value will be Completed,
+-- which will lead to the completed todos to be shown.
+-- 2. Key is the navigation key that we need to save into our model. We need it
+-- to be able to control the browser's page loading functionality
+-- (see LinkClicked branch of the update function for how the Key is used).
 
 
-init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
-init flags location =
-    ( Model "" flags.todos Nothing (locationToFilter location)
+init : Flags -> Url -> Key -> ( Model, Cmd Msg )
+init flags url navigationKey =
+    ( { text = ""
+      , todos = flags.todos
+      , editing = Nothing
+      , filter = urlToFilter url
+      , navigationKey = navigationKey
+      }
     , Cmd.none
     )
 
@@ -322,16 +383,32 @@ type alias Flags =
 
 
 
--- We're using Navigation.programWithFlags instead of Html.programWithFlags,
--- which takes UrlChange and it will pass the location to UrlChange whenever
--- the URL changes and then that will get passed into the update function.
+{-
+   We're using Browser.application instead of Browser.element, which extends the
+   latter in 3 important ways:
+
+   1. init gets two addition al parameters:
+     - the current Url from the browsers navigation bar.
+     This allows you to show different things depending on the Url.
+     - the navigation Key, which you can save in your model and use it later to be able
+     add items to manipulate browser's navigation history
+
+   2. When someone clicks a link, like <a href="/home">Home</a>, it is intercepted
+   as a UrlRequest. So instead of loading new HTML, onUrlRequest creates a message
+   for your update where you can decide exactly what to do next.
+
+   3. When the URL changes, the new Url is sent to onUrlChange.
+   The resulting message goes to update where you can decide how to show the new page.
+-}
 
 
 main : Program Flags Model Msg
 main =
-    Navigation.programWithFlags UrlChange
+    application
         { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
+        , onUrlRequest = LinkClicked
+        , onUrlChange = ChangeUrl
         }

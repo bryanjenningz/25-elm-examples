@@ -17,15 +17,17 @@
         );
       });
     };
-    
+
     var todosDefault = function(todos) {
       return isTodos(todos) ? todos : [];
     };
-    
-    var app = Elm.Main.fullscreen({
-      todos: todosDefault(JSON.parse(localStorage.todos || '[]'))
+
+    var app = Elm.Main.init({
+      flags : {
+        todos: todosDefault(JSON.parse(localStorage.todos || '[]'))
+      }
     });
-    
+
     app.ports.saveTodos.subscribe(function(todos) {
       localStorage.todos = JSON.stringify(todos);
     });

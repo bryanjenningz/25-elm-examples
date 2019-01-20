@@ -351,7 +351,7 @@ subscriptions model =
 
 
 
--- We're now using Browser.appication, whose init function requires two additional
+-- We're now using Browser.application, whose init function requires two additional
 -- arguments:
 -- 1. Url  - This will be passed to us by Elm runtime when the application is
 -- initialized.
@@ -387,7 +387,7 @@ type alias Flags =
    We're using Browser.application instead of Browser.element, which extends the
    latter in 3 important ways:
 
-   1. init gets two addition al parameters:
+   1. init gets two additional parameters:
      - the current Url from the browsers navigation bar.
      This allows you to show different things depending on the Url.
      - the navigation Key, which you can save in your model and use it later to be able

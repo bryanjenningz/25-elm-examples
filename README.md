@@ -40,13 +40,16 @@ then you will open the HTML for example 21 in your default browser.
 git clone https://github.com/bryanjenningz/25-elm-examples.git
 cd 25-elm-examples
 elm make 21-localstorage-editable-todos.elm --output elm.js
-open 21-localstorage-editable-todos.html
+elm reactor
+# The elm reactor command will server your files to http://localhost:8000,
+# so go to http://localhost:8000 in your browser and select the HTML file.
 ```
 
 The above code will compile and open example 21 in your default browser.
 To compile and view examples 22 through 25 locally, you do the same process of
 compiling the Elm file you want to the elm.js JavaScript file,
-then opening the HTML file you want to view in your browser.
+then running `elm reactor` and selecting the HTML file in your browser at
+http://localhost:8000.
 
 ## Other Free Resources
 

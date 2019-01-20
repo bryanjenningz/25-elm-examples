@@ -34,7 +34,7 @@
 
   <li><a href="https://ellie-app.com/3Z9fFVqF9Pra1">23-filter-todos.elm</a></li>
   <li><a href="https://ellie-app.com/3Z9gnSZKYPTa1">24-filter-todos.elm</a></li>
-  
+
   <li><a href="https://ellie-app.com/3wR7QgwzngSa1/25">25-navigation-todos.elm</a></li>
 </ol>
 
@@ -44,7 +44,7 @@
   <code>
 git clone https://github.com/bryanjenningz/25-elm-examples.git
 cd 25-elm-examples
-elm-make 21-localstorage-editable-todos.elm --output elm.js --yes
+elm make 21-localstorage-editable-todos.elm --output elm.js
 open 21-localstorage-editable-todos.html
   </code>
 </pre>

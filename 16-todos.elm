@@ -96,3 +96,18 @@ main =
         , view = view
         , update = update
         }
+
+
+
+{-
+Exercises to get to Lesson 17:
+
+We want to be able to hit the enter button to add a todo.
+
+How do we do this? 
+To accomplish this, we wrap the input and button
+in a form and made the AddTodo message get passed whenever an onSubmit
+event gets triggered. The onSubmit event will get triggered whenever
+the user hits enter in the input box or clicks on the button. Good luck and see you in lesson 17!
+
+-}

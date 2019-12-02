@@ -224,3 +224,17 @@ main =
         , view = view
         , update = update
         }
+
+
+{-
+Exercises to proceed to # 19
+
+What do we need to do?
+   Right now we are using the Browser.sandbox method. We now need to change this to use
+   the Browser.element method: https://package.elm-lang.org/packages/elm/browser/latest/Browser#element
+	
+
+-}
+
+
+

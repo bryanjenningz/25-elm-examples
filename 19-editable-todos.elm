@@ -207,3 +207,26 @@ main =
         , update = update
         , subscriptions = subscriptions
         }
+
+
+
+-- How to get to Exercise 20:
+-- change the init function to make use of the model constructor.
+-- HINT: follow these instructions:
+    -- The model right now has this as the value:
+    --   { text = "", todos = [ "Laundry", "Dishes" ], editing = Nothing }
+    -- We can also represent this value as this:
+    --   Model "" [ "Laundry", "Dishes" ] Nothing
+    -- Whenever we make a type alias that's a record, like Model, we
+    -- can use Model as a constructor function that returns a Model record.
+    -- Since we defined the Model type alias like this:
+    -- type alias Model =
+    --    { text : String
+    --    , todos : List String
+    --    , editing : Maybe TodoEdit
+    --    }
+    -- (Model "" [ "Laundry", "Dishes" ] Nothing) will make the first
+    -- argument the text property since that is first in the type alias
+    -- declaration. The second argument will be the todos property, and
+    -- the third argument will be the editing property.
+    -- Go ahead and make that change!

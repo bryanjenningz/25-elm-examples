@@ -62,3 +62,16 @@ main =
         , view = view
         , update = update
         }
+
+-- Exercises to 15:
+{-
+    Right now you cannot remove an item from the list.
+    Let us add that ability. If we want to get rid of an item
+    We should be able to click a button and remove it from the list.
+    Hint: add a message called RemoveToDo (or something equivalent)
+    and use the update function to remove that particular to do item
+    from the model. In the view function,  you can add a little 'X'
+    button such that when the user clicks it, the RemoveToDo message 
+    is sent to the update fucntion. Good luck and see you in lesson 15!
+
+-}

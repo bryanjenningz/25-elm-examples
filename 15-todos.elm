@@ -78,3 +78,18 @@ main =
         , view = view
         , update = update
         }
+
+
+-- Exercises to get to lesson 16
+{-
+
+The task at hand is to: (i) add some bootstrap classes to make things look a little more presentable.
+Secondly, we wan add a place holder for the input - when we type new to dos in the field, a placeholder
+would be helpful for users: https://package.elm-lang.org/packages/elm/html/latest/Html-Attributes#placeholder
+
+If you are using elm make then you may have to get access to some bootstrap styles - add them to your
+index.html page (or whatever you have named your page). Then run elm make src/Main.elm --debug
+If you don't have an src directory, then you will have to create one. You will also have to name
+your elm file Main.elm for the above to work.
+
+-}

@@ -94,3 +94,24 @@ main =
         , view = view
         , update = update
         }
+
+{-
+Exercises to proceed to # 18
+
+What do we need to do?
+	What if we wanted to edit an existing to do item? How would we go about doing that?
+	We want to be able to double click and existing to do item. When we double click 
+	that item, we want it to turn into an input form field, so that we can edit it.
+	When we press enter, we want the todo item to be updated, and we want the form
+	to disappear and things to appear as normal.
+
+	HINT: We need to keep track of which to do item is being edited. If an item is being edited
+	then we need to: (i) present a input text field. And when we are finished editing, we need to 
+	save the the new to do element.
+
+	Play around with this to see what we want to create: https://ellie-app.com/3Z9cDJ3N9g4a1
+	Then try to create it using your own solution.	Do not look at the code that is there,
+	otherwise you won't learn as much. 
+	
+
+-}

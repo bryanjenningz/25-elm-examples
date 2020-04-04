@@ -17,3 +17,18 @@ import Html exposing (Html, div, text)
 main : Html msg
 main =
     div [] [ text "Hello, World!" ]
+
+
+-- Instructions on how to get to lesson 4:
+{-
+In the html functions provided by elm, you can often add html attributes.
+See here: https://package.elm-lang.org/packages/elm/html/latest/Html-Attributes#class
+
+The div method accepts a list of attributes as its first parameter. With that in mind,
+let us give this div a particular class: "text-center" - because we want to center that text.
+
+Please review the docoumentation pasted to ensure you understand what is going on, 
+and we'll see you in lesson 4.
+-}
+
+

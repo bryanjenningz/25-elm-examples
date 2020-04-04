@@ -17,3 +17,12 @@ import Html exposing (Html, text)
 main : Html msg
 main =
     text "Hello, World!"
+
+-- Exercises to get to Lesson 3
+
+{-
+Elm  provides a variety of functions. For example, you can use the div function
+to add a html div tag: https://package.elm-lang.org/packages/elm/html/latest/Html#div
+
+Why not try to wrap the text above with a div tag? See you in the next lesson!
+-}
